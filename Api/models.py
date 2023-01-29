@@ -33,8 +33,7 @@ class AssetsModel(models.Model):
         return self.employee_name
     
 class CheckIn(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=User)
-    #com = models.OneToOneField(name, )
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     employee_name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
@@ -45,7 +44,7 @@ class CheckIn(models.Model):
         return self.employee_name
     
 class CheckOut(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     employee_name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
@@ -56,7 +55,7 @@ class CheckOut(models.Model):
         return self.employee_name
     
 class CheckOutAndReturn(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     employee_name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=20)

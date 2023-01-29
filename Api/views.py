@@ -2,17 +2,17 @@ from Api.models import AssetsModel, CheckIn, CheckOut, CheckOutAndReturn, Device
 from Api.serializers import AssetSerializer, CheckInSerializer, RegisterSerializer, CheckOutSerializer, CheckOutAndReturnSerializer, DeviceLogSerializer, CompanySerializer
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly, IsAuthenticated, AllowAny
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly, IsAuthenticated
 
 #For User Creations
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.auth import AuthToken
-from Api.serializers import RegisterSerializer
-from rest_framework import permissions
+
+
 from django.contrib.auth import login
-from knox.views import LoginView as KnoxLoginView
+
 
 
 class AssetViewSet(viewsets.ModelViewSet):
