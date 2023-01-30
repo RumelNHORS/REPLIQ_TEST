@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 
 class Company(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
@@ -20,7 +20,7 @@ ASSETS_CHOICES = (
     )
 
 class AssetsModel(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     employee_name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=20)

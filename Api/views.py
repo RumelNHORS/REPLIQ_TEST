@@ -1,19 +1,28 @@
 from Api.models import AssetsModel, CheckIn, CheckOut, CheckOutAndReturn, DeviceLog, Company
-from Api.serializers import AssetSerializer, CheckInSerializer, RegisterSerializer, CheckOutSerializer, CheckOutAndReturnSerializer, DeviceLogSerializer, CompanySerializer
+from Api.serializers import UserSerializer, RegisterSerializer, AssetSerializer, CheckInSerializer, RegisterSerializer, CheckOutSerializer, CheckOutAndReturnSerializer, DeviceLogSerializer, CompanySerializer
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly, IsAuthenticated
 
-#For User Creations
-from rest_framework.decorators import api_view
+##############
+from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework.authtoken.serializers import AuthTokenSerializer
-from knox.auth import AuthToken
+from knox.models import AuthToken
 
+########################
+# Register API
+class RegisterAPI(generics.GenericAPIView):
+    serializer_class = RegisterSerializer
 
-from django.contrib.auth import login
-
-
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response({
+        "user": UserSerializer(user, context=self.get_serializer_context()).data,
+        "token": AuthToken.objects.create(user)[1]
+        })
+          
 
 class AssetViewSet(viewsets.ModelViewSet):
     queryset = AssetsModel.objects.all()
@@ -52,52 +61,4 @@ class CompanyCViewSet(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
     
-#For User Creations
-@api_view(['POST'])
-def login_api(request):
-    serializer = AuthTokenSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    user = serializer.validated_data['user']
-    _, token = AuthToken.objects.create(user)
     
-    return Response({
-        'user_info':{
-            'id':user.id,
-            'username':user.username,
-            'email':user.email
-        },
-        'token':token
-    })
-
-@api_view(['GET'])
-def get_user_data(request):
-    user = request.user
-    
-    if user.is_authenticate:
-        return Response({
-            'user_info':{
-                'id':user.id,
-                'username':user.username,
-                'email':user.email
-            }
-        })
-    return Response({'erroe':'Not Authenticcated'}, status=400)
-
-
-@api_view(['POST'])
-def register_api(request):
-    serializer = RegisterSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    
-    user = serializer.save()
-    _, token = AuthToken.objects.create(user)
-    
-    return Response({
-        'user_info':{
-            'id':user.id,
-            'username':user.username,
-            'email':user.email
-        },
-        'token':token
-    })
-
